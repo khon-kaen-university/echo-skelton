@@ -1,0 +1,35 @@
+{% comment %} import base_generic {% endcomment %}
+{% extends "base_generic.html" %}
+
+{% comment %} add head {% endcomment %}
+
+{% block head %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+  crossorigin="anonymous">
+{% endblock %}
+
+{% comment %} add body {% endcomment %}
+{% block body %}
+<div class="container">
+  <!-- jumbotron -->
+  <div class="jumbotron">
+    <h1 class="display-3">{{ title|default:"KKU echo-skelton" }}</h1>
+    <p class="lead">Echo
+      <a href="https://echo.labstack.com/" target="_blank">Echo</a>
+      High performance, extensible, minimalist Go web framework
+    </p>
+    <hr class="my-4">
+    <p>
+    <img src="https://echo.labstack.com/images/terminal.png"></img>
+    </p>
+  </div>
+  <!-- /jumbotron -->
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"
+  crossorigin="anonymous">
+</script>
+{% endblock %}

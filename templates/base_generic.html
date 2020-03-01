@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="{% block description %}{% endblock %}">
+  <meta name="author" content="{% block author %}{% endblock %}">
+  <link rel="icon" href="/favicon.ico">
+
+  <title>{{ title|default:"KKU echo-skelton" }}</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.1.4/tailwind.min.css" integrity="sha256-bCQF5OufWlWM/MW9mCb/eDibvff1W8BNq9ZK69C8FSI=" crossorigin="anonymous" />
+
+  <!-- Sarabun web fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Sarabun|Source+Sans+Pro" rel="stylesheet" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+  <!-- Custom styles for this template -->
+  {% block head %}
+  {% endblock %}
+</head>
+
+<body class="min-h-screen bg-gray-200">
+
+  {% block body %}
+  {% endblock %}
+
+  <!-- Page level plugins -->
+  {% block script %}
+  {% endblock %}
+</body>
+
+</html>
