@@ -7,18 +7,16 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jmoiron/sqlx"
+	"github.com/jinzhu/gorm"
 	// Import mysql driver
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var (
 	// DBMain for main DB connection
-	DBMain *sqlx.DB
+	DBMain *gorm.DB
 	// DBMainConnStr for main DB connection
 	DBMainConnStr string
-	// DBLog for log DB connection
-	// DBLog *sqlx.DB
 )
 
 // DateTimeFormat Long date time mysql format
@@ -70,7 +68,7 @@ func (c mariadbConfig) mariadbDStoreString(databaseName string) string {
 }
 
 // NewMariadbDB creates a new database connection backed by a given mariadb server.
-func NewMariadbDB(dbname string, username string, password string, host string, portStr string, socket string, maxIdleConns int, maxOpenConns int, parseTime bool) (conn *sqlx.DB, connStr string, err error) {
+func NewMariadbDB(dbname string, username string, password string, host string, portStr string, socket string, maxIdleConns int, maxOpenConns int, parseTime bool) (conn *gorm.DB, connStr string, err error) {
 
 	// Use system default database if empty
 	if len(dbname) == 0 {
@@ -102,40 +100,40 @@ func NewMariadbDB(dbname string, username string, password string, host string, 
 		return nil, connStr, fmt.Errorf("MariaDB: connStr needed")
 	}
 	// Open connection to database
-	conn, err = sqlx.Connect("mysql", connStr)
+	conn, err = gorm.Open("mysql", connStr)
 	if err != nil {
 		return nil, connStr, fmt.Errorf("MariaDB: could not get a connection: %v", err)
 	}
 
 	// Set max open connection at time
 	if maxOpenConns > 0 {
-		conn.SetMaxOpenConns(maxOpenConns)
+		conn.DB().SetMaxOpenConns(maxOpenConns)
 	} else {
 		// Default value follow mariadb.js pool
-		conn.SetMaxOpenConns(10)
+		conn.DB().SetMaxOpenConns(10)
 	}
 
 	// Set max idle connection at time
 	if maxIdleConns > 0 {
-		conn.SetMaxIdleConns(maxIdleConns)
+		conn.DB().SetMaxIdleConns(maxIdleConns)
 	} else {
 		// Default value follow mariadb.js pool
-		conn.SetMaxIdleConns(5)
+		conn.DB().SetMaxIdleConns(5)
 	}
 
 	// Time out for long connection
 	// follow mariadb.js pool
-	conn.SetConnMaxLifetime(1800 * time.Second)
+	conn.DB().SetConnMaxLifetime(1800 * time.Second)
 
 	return
 }
 
 // GetDBMainConn get db connection
-func GetDBMainConn() (conn *sqlx.DB, err error) {
-	checkPing := DBMain.Ping()
+func GetDBMainConn() (conn *gorm.DB, err error) {
+	checkPing := DBMain.DB().Ping()
 	if checkPing != nil {
 		log.Printf("MariaDB: %+v", checkPing)
-		DBMain, err = sqlx.Connect("mysql", DBMainConnStr)
+		DBMain, err = gorm.Open("mysql", DBMainConnStr)
 		if err != nil {
 			log.Printf("MariaDB: %+v", err)
 			return nil, fmt.Errorf("MariaDB: could not get a connection: %v", err)

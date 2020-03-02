@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"time"
 
+	"echo-skelton/datamodels"
 	datasources "echo-skelton/datasources"
 
 	"github.com/dgrijalva/jwt-go"
@@ -113,6 +114,9 @@ func main() {
 	render := pongo2echo.NewRenderer()
 	render.AddDirectory("./templates")
 	app.Renderer = render
+
+	// Migrate the schema
+	datasources.DBMain.AutoMigrate(&datamodels.MainUsers{})
 
 	// Register static file
 	app.Static("/", "./public")

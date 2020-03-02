@@ -9,3 +9,5 @@ replace echo-skelton/services => ../services
 replace echo-skelton/routers => ../routers
 
 replace echo-skelton/oauth => ../oauth
+
+require github.com/jinzhu/gorm v1.9.12

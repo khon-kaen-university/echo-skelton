@@ -13,11 +13,12 @@ replace echo-skelton/routers => ./routers
 replace echo-skelton/oauth => ./oauth
 
 require (
+	echo-skelton/datamodels v0.0.0-00010101000000-000000000000
 	echo-skelton/datasources v0.0.0-00010101000000-000000000000
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4 // indirect
 	github.com/go-redis/redis v6.15.7+incompatible
-	github.com/go-sql-driver/mysql v1.4.1
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gorilla/sessions v1.2.0
 	github.com/h3poteto/pongo2echo v0.1.0
 	github.com/jmoiron/sqlx v1.2.0
