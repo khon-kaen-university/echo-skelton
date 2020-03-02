@@ -67,9 +67,9 @@ func main() {
 		os.Getenv("REDIS_PASSWORD"),
 		0,
 		time.Duration(30*time.Second),
-		"prefix_",
+		os.Getenv("SESS_PREFIX"),
 	)
-	if err != nil && PrdMode {
+	if err != nil {
 		log.Fatalf("error while connect to redis:\n %+v", err)
 	}
 
@@ -93,7 +93,7 @@ func main() {
 		app.Use(session.MiddlewareWithConfig(session.Config{Store: datasources.RedisStore}))
 	} else {
 		app.Use(middleware.Logger())
-		app.Use(session.Middleware(sessions.NewCookieStore([]byte("zercle"))))
+		app.Use(session.Middleware(sessions.NewCookieStore([]byte(os.Getenv("SESS_PREFIX")))))
 	}
 
 	// Allow API access by cross site request
@@ -119,7 +119,6 @@ func main() {
 
 	// Index endpoint
 	app.GET("/", func(c echo.Context) error {
-		// ctx := c.(*zercleCTX.Context)
 		ctx := &zercleCTX.Context{c}
 		name := ctx.FormValueDefault("name", "Anonymous")
 		return ctx.String(http.StatusOK, "Hello "+name)
@@ -130,6 +129,14 @@ func main() {
 		jwtToken := ctx.Get("jwt").(*jwt.Token)
 		return ctx.JSON(http.StatusOK, jwtToken)
 	}, authJWT)
+
+	// Start HTTP server
+	go func() {
+		log.Printf("Runtime ENV: %s", os.Getenv("GO_ENV"))
+		if err := app.Start(os.Getenv("HTTP_PORT")); err != nil {
+			app.Logger.Info("shutting down the HTTP server")
+		}
+	}()
 
 	// Start HTTPS server
 	go func() {
