@@ -134,9 +134,10 @@ func main() {
 		return ctx.JSON(http.StatusOK, jwtToken)
 	}, authJWT)
 
+	log.Printf("Runtime ENV: %s", os.Getenv("GO_ENV"))
+
 	// Start HTTP server
 	go func() {
-		log.Printf("Runtime ENV: %s", os.Getenv("GO_ENV"))
 		if err := app.Start(os.Getenv("HTTP_PORT")); err != nil {
 			app.Logger.Info("shutting down the HTTP server")
 		}
@@ -144,7 +145,6 @@ func main() {
 
 	// Start HTTPS server
 	go func() {
-		log.Printf("Runtime ENV: %s", os.Getenv("GO_ENV"))
 		if err := app.StartTLS(os.Getenv("HTTPS_PORT"), os.Getenv("CERT_PATH"), os.Getenv("PRIV_PATH")); err != nil {
 			app.Logger.Info("shutting down the HTTPS server")
 		}
