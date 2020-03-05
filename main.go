@@ -11,6 +11,7 @@ import (
 
 	"echo-skelton/datamodels"
 	datasources "echo-skelton/datasources"
+	services "echo-skelton/services"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/sessions"
@@ -46,7 +47,7 @@ func main() {
 	// Init database connection
 	// Create connection to database
 	datasources.DBMain, datasources.DBMainConnStr, err = datasources.NewMariadbDB(
-		"db_oauth_kku",
+		os.Getenv("DB_NAME_MAIN"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_HOST"),
@@ -88,6 +89,9 @@ func main() {
 	app := echo.New()
 	app.Use(middleware.Recover())
 	app.Pre(middleware.RemoveTrailingSlash())
+
+	// Init HTTPClient
+	services.CreateHTTPClient()
 
 	// Store session in redis
 	if PrdMode {
