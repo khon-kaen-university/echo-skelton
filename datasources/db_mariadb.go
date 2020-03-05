@@ -9,7 +9,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	// Import mysql driver
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
@@ -20,10 +20,10 @@ var (
 )
 
 // DateTimeFormat Long date time mysql format
-const DateTimeFormat = "2006-02-01 15:04:05"
+const DateTimeFormat = "2006-01-02 15:04:05"
 
 // DateFormat Date mysql format
-const DateFormat = "2006-02-01"
+const DateFormat = "2006-01-02"
 
 // TimeFormat Time mysql format
 const TimeFormat = "15:04:05"
@@ -77,7 +77,7 @@ func NewMariadbDB(dbname string, username string, password string, host string, 
 
 	port, err := strconv.Atoi(portStr)
 	if err != nil {
-		return nil, connStr, fmt.Errorf("MariaDB: port must be number string: %v", err)
+		return nil, connStr, fmt.Errorf("mariadb: port must be number string: %v", err)
 	}
 
 	dbConnOption := mariadbConfig{
@@ -89,7 +89,7 @@ func NewMariadbDB(dbname string, username string, password string, host string, 
 	}
 
 	connStr = dbConnOption.mariadbDStoreString(dbname)
-	connStr = connStr + "?loc=Asia%2FBangkok&time_zone=%27Asia%2FBangkok%27"
+	connStr = connStr + "?loc=Asia%2FBangkok"
 	connStr = connStr + "&charset=utf8mb4,utf8"
 	if parseTime {
 		connStr = connStr + "&parseTime=true"
@@ -97,12 +97,12 @@ func NewMariadbDB(dbname string, username string, password string, host string, 
 
 	// Use system default database if empty
 	if len(connStr) == 0 {
-		return nil, connStr, fmt.Errorf("MariaDB: connStr needed")
+		return nil, connStr, fmt.Errorf("mariadb: connStr needed")
 	}
 	// Open connection to database
 	conn, err = gorm.Open("mysql", connStr)
 	if err != nil {
-		return nil, connStr, fmt.Errorf("MariaDB: could not get a connection: %v", err)
+		return nil, connStr, fmt.Errorf("mariadb: could not get a connection: %v", err)
 	}
 
 	// Set max open connection at time
