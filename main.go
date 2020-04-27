@@ -76,7 +76,7 @@ func main() {
 	}
 
 	// Init JWT
-	err = datasources.NewJWTKey(os.Getenv("JWT_PUBLIC"), os.Getenv("JWT_PRIVATE"))
+	err = datasources.NewJWTECKey(os.Getenv("JWT_PUBLIC"), os.Getenv("JWT_PRIVATE"))
 	if err != nil {
 		log.Fatalf("Error init JWT:\n %+v", err)
 	}
@@ -106,7 +106,7 @@ func main() {
 
 	// Validate JWT
 	authJWT := middleware.JWTWithConfig(middleware.JWTConfig{
-		SigningKey:    datasources.JWTVerifyKey,
+		SigningKey:    datasources.JWTECVerifyKey,
 		SigningMethod: "ES256",
 		ContextKey:    "jwt",
 	})
